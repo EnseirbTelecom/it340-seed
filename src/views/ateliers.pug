@@ -1,0 +1,31 @@
+doctype html
+html(lang="fr")
+  include head.pug
+  .container
+    h2 Liste des ateliers
+    p
+      button.btn.btn-primary(type="button",data-toggle="collapse",data-target="#ajoutAtelier",aria-expanded="false" ,aria-controls="collapseExample") Ajouter
+    #ajoutAtelier.collapse
+      div.card.card-block
+        form(method="post" action="/ateliers")
+          .form-group
+            label(for="inputTitre") Titre
+              input#inputTitre.form-control(type="input", name="titre")
+          .form-group
+            label(for="inputDomaine") Domaine
+              input#inputDomaine.form-control(type="input", name="domaine")
+          button.btn.btn-primary(type="submit") Ajouter
+    table.table
+      thead
+        tr
+          td Titre
+          td Actions
+      tbody
+        each atelier in ateliers
+          tr
+            td= atelier.getTitre()
+            td
+              a.btn.btn-danger(href="/suppr_atelier/" + atelier.getId())
+                i.fa.fa-trash-o
+                |  Delete
+  include footer.pug

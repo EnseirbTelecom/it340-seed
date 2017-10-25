@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  mongo:
+    image: "mongo:3.0"
+    ports:
+      - "27017:27017"
+  nodejs:
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:8080"
