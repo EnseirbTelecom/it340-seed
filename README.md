@@ -7,7 +7,7 @@ Dépôt de démonstration pour montrer un exemple d'implémentation du site circ
 L'installation de l'application nécessite `nodejs > 6.0` (sauf dans le cas d'utilisation via `docker`).
 
 ```
-git clone https://github.com/EnseirbTelecom/it340-full.git
+git clone https://github.com/EnseirbTelecom/it340-seed.git
 cd it340-full
 npm install
 ```
@@ -30,9 +30,7 @@ Il est possible de lancer l'application grâce à `docker`. Pour cela, il faut d
 
 Voici les différentes commandes du système de build:
 
-* `npm run lint`: vérifie la syntaxe du code
 * `npm run build`: compile l'application
 * `npm test`: lance les tests
-* `npm run doc`: génère la doc
 
 Les fichiers compilés sont placés dans le répertoire `dist`.

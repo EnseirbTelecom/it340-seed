@@ -14,4 +14,4 @@ RUN apt-get update -y \
 
 EXPOSE 80 8080
 
-CMD ["npm", "run", "prod"]
+CMD ["npm", "run", "run-docker"]

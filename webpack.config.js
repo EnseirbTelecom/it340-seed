@@ -1,13 +1,15 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
+const glob = require('glob');
 
 module.exports = {
   target: 'node',
   externals: [nodeExternals()],
   entry : {
     '/srv/server': './src/srv/server.js',
-    '/test/testAtelier': './test/testAtelier.js'
+    '/test/unit': glob.sync('./test/unit/*.js'),
+    '/test/validation': glob.sync('./test/validation/*.js')
   },
   output : {
     filename: '[name].js',

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/srv/server.js",
+  "engines": {
+    "node": ">=6"
+  },
   "dependencies": {
     "axios": "^0.17.0",
     "express": "^4.16.2",
@@ -13,24 +16,47 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-istanbul": "^4.1.5",
     "babel-preset-env": "^1.6.0",
+    "casper-chai": "^0.3.0",
+    "casperjs": "^1.1.4",
+    "chai": "^4.1.2",
     "copy-webpack-plugin": "^4.1.1",
     "eslint": "^4.9.0",
     "mocha": "^4.0.1",
+    "mocha-casperjs": "^0.6.0",
+    "nyc": "^11.3.0",
     "spectacle-docs": "^0.9.11",
     "webpack": "^3.7.1",
     "webpack-node-externals": "^1.6.0"
   },
   "scripts": {
-    "build": "./node_modules/.bin/webpack",
+    "build-source": "./node_modules/.bin/webpack",
+    "build-doc": "./node_modules/.bin/spectacle doc/circuit.yaml -t dist/doc",
+    "build": "npm run build-source && npm run build-doc",
     "clean": "rm -rf dist/",
-    "debug": "MONGO=mongodb://localhost:27017/it340-full API=http://localhost:8080 node dist/srv/server.js",
-    "start": "./node_modules/.bin/webpack && MONGO=mongodb://localhost:27017/it340-full API=http://localhost:8080 node dist/srv/server.js",
-    "prod": "./node_modules/.bin/webpack && MONGO=mongodb://mongo:27017/it340-full API=http://nodejs:8080 node dist/srv/server.js",
-    "test": "./node_modules/.bin/mocha ./dist/test",
-    "doc": "./node_modules/.bin/spectacle doc/circuit.yaml -t dist/doc",
-    "lint": "./node_modules/.bin/eslint .",
-    "docker": "docker-compose -f docker/docker-compose.yml --project-directory . build nodejs && docker-compose -f docker/docker-compose.yml --project-directory . up -d"
+    "run-debug": "MONGO=mongodb://localhost:27017/it340-full API=http://localhost:8080 node dist/srv/server.js",
+    "run-docker": "MONGO=mongodb://mongo:27017/it340-full API=http://nodejs:8080 node dist/srv/server.js",
+    "run-heroku": "node dist/srv/server.js",
+    "start": "npm run build-source && npm run run-heroku",
+    "test-coverage": "NODE_ENV=test nyc mocha test/unit/*.js",
+    "test-unit": "./node_modules/.bin/mocha ./dist/test/unit.js",
+    "test-validation": "./node_modules/.bin/mocha-casperjs ./dist/test/validation.js",
+    "test-lint": "./node_modules/.bin/eslint .",
+    "test": "npm run test-lint && npm run test-unit && npm run test-validation",
+    "docker-up": "docker-compose -f docker/docker-compose.yml --project-directory . build nodejs && docker-compose -f docker/docker-compose.yml --project-directory . up -d",
+    "docker-down": "docker-compose -f docker/docker-compose.yml --project-directory . down"
+  },
+  "nyc": {
+    "require": [
+      "babel-register"
+    ],
+    "reporter": [
+      "text",
+      "lcov"
+    ],
+    "sourceMap": false,
+    "instrument": false
   },
   "repository": {
     "type": "git",

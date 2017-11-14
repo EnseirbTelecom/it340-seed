@@ -5,13 +5,12 @@ import bodyParser from 'body-parser';
 import multer from 'multer';
 import MongoClient from 'mongodb';
 
-var apiUrl = process.env.API || 'http://localhost:8080';
-var mongodbUrl = process.env.MONGO || 'mongodb://localhost:27017/it340-full';
+const mongodbUrl = process.env.MONGO || 'mongodb://localhost:27017/it340-full';
+const port = process.env.PORT || 8080;
+const apiUrl = process.env.API || 'http://localhost:8080';
 
-if (process.env.OPENSHIFT_NODEJS_IP)
-  apiUrl = `http://${process.env.OPENSHIFT_NODEJS_IP}:${process.env.OPENSHIFT_NODEJS_PORT}`;
-if (process.env.OPENSHIFT_MONGODB_DB_URL)
-  mongodbUrl = `${process.env.OPENSHIFT_MONGODB_DB_URL}it340-full`;
+console.log(`MongoDB url: ${mongodbUrl}`);
+console.log(`API url: ${apiUrl}`);
 
 const upload = multer();
 
@@ -90,6 +89,7 @@ app.get('/ateliers', function (req, res) {
     console.log(remRes.data.map(atelier => new Atelier(atelier)));
     res.render('ateliers', { ateliers: remRes.data.map(atelier => new Atelier(atelier)) });
   }).catch((remErr) => {
+    console.log(remErr);
     res.redirect(`/erreur?code=403&message=${encodeURIComponent(remErr.response.data.message)}`);
   });
 });
@@ -104,7 +104,7 @@ app.get('/suppr_atelier/:id', function (req, res) {
 
 MongoClient.connect(mongodbUrl).then((db) => {
   dao.setDb(db);
-  app.listen(8080, () => {
-    console.log('http server listening on port 8080');
+  app.listen(port, () => {
+    console.log(`http server listening on port ${port}`);
   });
 }).catch((err) => console.log(err));
